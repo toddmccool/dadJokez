@@ -19,6 +19,12 @@
       textarea {
         display: block;
       }
+
+      @media only screen and (max-width: 600px) {
+        body {
+          width: 100px;
+        }
+      }
     </style>
   </head>
   <body>
@@ -29,8 +35,8 @@
     <textarea
       id="input"
       oninput="checkInstantFeedback()"
-      rows="20"
-      cols="60"
+      rows="10"
+      cols="40"
       placeholder="Tell me about your day"
     ></textarea>
 
