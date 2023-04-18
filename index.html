@@ -80,6 +80,15 @@
           } else if (word.match(/^(sad|mad)$/i)) {
             response = "I'm sorry to hear that";
             lastIndex = index;
+          } else if (word.match(/^(sad|mad)$/i)) {
+            response = "I'm sorry to hear that";
+            lastIndex = index;
+          } else if (word.match(/^glad$/i)) {
+            response = "Love that journey for you!";
+            lastIndex = index;
+          } else if (word.match(/^excited$/i)) {
+            response = "Love that journey for you!";
+            lastIndex = index;
           } else if (word.match(/^(died|dead|dying)$/i)) {
             response = "That sounds serious";
             lastIndex = index;
@@ -97,6 +106,9 @@
             lastIndex = index;
           } else if (word.match(/(em|um|im|(?<!fr)om)$/)) {
             response = `${word}? I hardly know 'em!`;
+            lastIndex = index;
+          } else if (word.match(/(these)$/)) {
+            response = `these nuts!`;
             lastIndex = index;
           }
         });
