@@ -24,6 +24,14 @@
         body {
           width: 100px;
         }
+        #resultDiv {
+          background-color: yellow;
+          width: 130px;
+        }
+        #inputLabel {
+          background-color: yellow;
+          width: 130px;
+        }
       }
     </style>
   </head>
@@ -36,7 +44,7 @@
       id="input"
       oninput="checkInstantFeedback()"
       rows="7"
-      cols="30"
+      cols="20"
       placeholder="Tell me about your day"
     ></textarea>
 
@@ -53,7 +61,7 @@
         const name = document.getElementById("name").value;
         document.getElementById(
           "inputLabel"
-        ).innerText = `tell me about Your day, ${name}:, and tell me how each event made you feel`;
+        ).innerText = `tell me about Your day, ${name}:, & how each event made you feel`;
       }
 
       function handleSubmit() {
@@ -86,13 +94,7 @@
           } else if (word.match(/^(sad|mad)$/i)) {
             response = "I'm sorry to hear that";
             lastIndex = index;
-          } else if (word.match(/^(sad|mad)$/i)) {
-            response = "I'm sorry to hear that";
-            lastIndex = index;
-          } else if (word.match(/^glad$/i)) {
-            response = "Love that journey for you!";
-            lastIndex = index;
-          } else if (word.match(/^excited$/i)) {
+          } else if (word.match(/^(glad|excited)$/i)) {
             response = "Love that journey for you!";
             lastIndex = index;
           } else if (word.match(/^(died|dead|dying)$/i)) {
@@ -124,17 +126,19 @@
         }
 
         if (response !== lastResponse) {
-          result.innerHTML = response;
+          const resultDiv = document.createElement("div");
+          resultDiv.textContent = response;
+          result.appendChild(resultDiv);
+
           lastResponse = response;
 
           if (isInstant) {
-            clearTimeout(messageTimeout);
-            messageTimeout = setTimeout(() => {
-              result.innerHTML = "";
-            }, 2000); // Updated the timeout to 2 seconds (2000 milliseconds)
+            setTimeout(() => {
+              result.removeChild(resultDiv);
+            }, 2000);
           }
         } else {
-          lastIndex = -1; // Reset lastIndex when no new response is generated
+          lastIndex = -1;
         }
       }
     </script>
