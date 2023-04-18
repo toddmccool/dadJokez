@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Interactive App</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: aqua;
+        font-weight: bold;
+      }
+
+      label {
+        display: block;
+        margin-top: 1em;
+      }
+
+      textarea {
+        display: block;
+      }
+    </style>
+  </head>
+  <body>
+    <label for="name">Your name:</label>
+    <input id="name" type="text" oninput="updateInputLabel()" />
+
+    <label id="inputLabel" for="input">Your day:</label>
+    <textarea
+      id="input"
+      oninput="checkInstantFeedback()"
+      rows="20"
+      cols="80"
+      placeholder="Tell me about your day"
+    ></textarea>
+
+    <button onclick="handleSubmit()">Submit</button>
+    <div id="result"></div>
+
+    <script>
+      let instantTimeout = null;
+      let messageTimeout = null;
+      let lastResponse = "";
+      let lastIndex = -1;
+
+      function updateInputLabel() {
+        const name = document.getElementById("name").value;
+        document.getElementById(
+          "inputLabel"
+        ).innerText = `tell me about Your day, ${name}:`;
+      }
+
+      function handleSubmit() {
+        processInput();
+      }
+
+      function checkInstantFeedback() {
+        processInput(true);
+      }
+
+      function processInput(isInstant = false) {
+        const name = document.getElementById("name").value;
+        const input = document.getElementById("input").value;
+        const inputLength = input.length;
+        const result = document.getElementById("result");
+        let response = "";
+
+        if (inputLength < 1) {
+          return;
+        }
+
+        const words = input.split(/[\s,.!?]+/);
+        words.forEach((word, index) => {
+          if (index <= lastIndex) {
+            return;
+          }
+          if (word.match(/^happy$/i)) {
+            response = "Love that journey for you!";
+            lastIndex = index;
+          } else if (word.match(/^(sad|mad)$/i)) {
+            response = "I'm sorry to hear that";
+            lastIndex = index;
+          } else if (word.match(/^(died|dead|dying)$/i)) {
+            response = "That sounds serious";
+            lastIndex = index;
+          } else if (
+            word.match(
+              /^(bigger|smaller|longer|big|small|long|shorter|short|hard|soft)$/
+            )
+          ) {
+            const start = Math.max(0, index - 4);
+            const precedingWords = words.slice(start, index).join(" ");
+            response = `${precedingWords} ${word}\n<b>That's what she said!</b>\n...sorry go on ${name}`;
+            lastIndex = index;
+          } else if (word.match(/(er|or|ir)$/)) {
+            response = `${word}? I hardly know 'er!`;
+            lastIndex = index;
+          } else if (word.match(/(em|um|im|(?<!fr)om)$/)) {
+            response = `${word}? I hardly know 'em!`;
+            lastIndex = index;
+          }
+        });
+
+        if (!response) {
+          response = "Oooh, go on!";
+        }
+
+        if (response !== lastResponse) {
+          result.innerHTML = response;
+          lastResponse = response;
+
+          if (isInstant) {
+            clearTimeout(messageTimeout);
+            messageTimeout = setTimeout(() => {
+              result.innerHTML = "";
+            }, 2000); // Updated the timeout to 2 seconds (2000 milliseconds)
+          }
+        } else {
+          lastIndex = -1; // Reset lastIndex when no new response is generated
+        }
+      }
+    </script>
+  </body>
+</html>
